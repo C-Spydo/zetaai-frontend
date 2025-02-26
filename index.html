@@ -6,6 +6,24 @@
     <title>ZetaAI Chat</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .dot-animation {
+            display: inline-block;
+            font-size: 24px;
+            animation: dots 1.5s infinite;
+        }
+
+        .dot-animation:nth-child(1) { animation-delay: 0s; }
+        .dot-animation:nth-child(2) { animation-delay: 0.2s; }
+        .dot-animation:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes dots {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+    </style>
 </head>
 <body class="bg-gray-900 text-white flex flex-col justify-center items-center h-screen">
 
@@ -110,13 +128,30 @@
                     characterDescription = $("#custom-description").val().trim() || "A custom personality defined by the user.";
                 }
 
+                // Append user message
                 $("#chat-box").append(`<div class="bg-gray-700 p-2 rounded-md"><strong>${username}:</strong> ${message}</div>`);
                 $("#message").val("");
 
+                // Show loading indicator (animated dots)
+                let loadingIndicator = $(`<div id="loading-indicator" class="bg-transparent text-center text-white">
+                    <span class="dot-animation">.</span>
+                    <span class="dot-animation">.</span>
+                    <span class="dot-animation">.</span>
+                </div>`);
+                $("#chat-box").append(loadingIndicator);
+                $("#chat-box").scrollTop($("#chat-box")[0].scrollHeight);
+
+                // Call API
                 let response = await callChatAPI(message, characterName, characterDescription);
+
+                // Remove loading indicator
+                $("#loading-indicator").remove();
+
+                // Append response
                 $("#chat-box").append(`<div class="bg-green-700 p-2 rounded-md"><strong>ZetaAI (${characterName}):</strong> ${response}</div>`);
                 $("#chat-box").scrollTop($("#chat-box")[0].scrollHeight);
             });
+
 
             // Voice Recognition
             let recognition;
