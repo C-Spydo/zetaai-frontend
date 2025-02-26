@@ -44,7 +44,14 @@
                 <option value="Amaka">Amaka - Informal Businesswoman</option>
                 <option value="Chief">Chief - Well-travelled Nigerian Big Man</option>
                 <option value="Tade">Tade - 22yo University Student</option>
+                <option value="Custom">➕ Add Custom Character</option>
             </select>
+        </div>
+
+        <!-- Custom Character Inputs (Hidden by Default) -->
+        <div id="custom-character-fields" class="mt-3 hidden">
+            <input type="text" id="custom-name" class="w-full p-2 bg-gray-700 border-none text-white rounded mb-2" placeholder="Custom Character Name">
+            <textarea id="custom-description" class="w-full p-2 bg-gray-700 border-none text-white rounded" placeholder="Describe your character..."></textarea>
         </div>
 
     </div>
@@ -66,15 +73,24 @@
                 "Tade": "You are a 22-year-old Nigerian youth in his final year of university."
             };
 
-            async function callChatAPI(message, character) {
+            $("#character").change(function() {
+                if ($(this).val() === "Custom") {
+                    $("#custom-character-fields").removeClass("hidden");
+                } else {
+                    $("#custom-character-fields").addClass("hidden");
+                }
+            });
+
+            async function callChatAPI(message, character, description) {
                 try {
-                    let response = await fetch("https://example.com/chat-api", {  // Replace with actual API URL
+                    let response = await fetch("http://127.0.0.1:8000/prompt", {  // Replace with actual API URL
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ message, character_description: characters[character] })
+                        body: JSON.stringify(
+                            { message, system_message: description, username})
                     });
-                    let data = await response.json();
-                    return data.response || "No Response";
+                    let data = await response.text();
+                    return data || "No Response";
                 } catch {
                     return "No Response";
                 }
@@ -85,12 +101,20 @@
                 if (!message) return;
 
                 let selectedCharacter = $("#character").val();
+                let characterName = selectedCharacter;
+                let characterDescription = characters[selectedCharacter] || "";
+
+                // If custom character is selected, get user inputs
+                if (selectedCharacter === "Custom") {
+                    characterName = $("#custom-name").val().trim() || "Custom Character";
+                    characterDescription = $("#custom-description").val().trim() || "A custom personality defined by the user.";
+                }
 
                 $("#chat-box").append(`<div class="bg-gray-700 p-2 rounded-md"><strong>${username}:</strong> ${message}</div>`);
                 $("#message").val("");
 
-                let response = await callChatAPI(message, selectedCharacter);
-                $("#chat-box").append(`<div class="bg-green-700 p-2 rounded-md"><strong>ZetaAI (${selectedCharacter}):</strong> ${response}</div>`);
+                let response = await callChatAPI(message, characterName, characterDescription);
+                $("#chat-box").append(`<div class="bg-green-700 p-2 rounded-md"><strong>ZetaAI (${characterName}):</strong> ${response}</div>`);
                 $("#chat-box").scrollTop($("#chat-box")[0].scrollHeight);
             });
 
