@@ -18,7 +18,7 @@
     </header>
 
     <!-- Username Widget -->
-    <div class="absolute top-20 right-4 bg-gray-700 px-4 py-2 rounded-md text-sm shadow-md">
+    <div class="absolute top-24 right-4 bg-gray-700 px-4 py-2 rounded-md text-sm shadow-md">
         <span id="username"></span>
     </div>
 
@@ -28,11 +28,23 @@
         <!-- Chat Box -->
         <div id="chat-box" class="flex-1 overflow-y-auto p-2 space-y-2 border-b border-gray-600"></div>
         
-        <!-- Input & Voice Controls -->
+        <!-- Input, Voice, and Character Selection -->
         <div class="flex mt-3 space-x-2">
             <button id="record" class="p-2 bg-red-500 rounded text-white">🎤</button>
             <input type="text" id="message" class="flex-1 p-2 bg-gray-700 border-none text-white rounded" placeholder="Type or speak a message...">
             <button id="send" class="p-2 bg-blue-500 rounded">Send</button>
+        </div>
+
+        <!-- Character Selection -->
+        <div class="flex mt-3 space-x-2 items-center">
+            <label for="character" class="text-sm opacity-80">Choose AI:</label>
+            <select id="character" class="p-2 bg-gray-700 text-white rounded flex-1">
+                <option value="Peter">Peter - Nigerian Bank Worker</option>
+                <option value="Femi">Femi - PHD in Economics & Statistics</option>
+                <option value="Amaka">Amaka - Informal Businesswoman</option>
+                <option value="Chief">Chief - Well-travelled Nigerian Big Man</option>
+                <option value="Tade">Tade - 22yo University Student</option>
+            </select>
         </div>
 
     </div>
@@ -46,13 +58,20 @@
             }
             $("#username").text(`Username: ${username}`);
 
-            // Function to call chat API
-            async function callChatAPI(message) {
+            const characters = {
+                "Peter": "You are a Nigerian middle-aged Bank worker.",
+                "Femi": "You are a PHD holder in economics & statistics.",
+                "Amaka": "You are a businesswoman who likes to speak informal English a lot.",
+                "Chief": "You are a Nigerian big man, well-travelled and use lots of big English words.",
+                "Tade": "You are a 22-year-old Nigerian youth in his final year of university."
+            };
+
+            async function callChatAPI(message, character) {
                 try {
                     let response = await fetch("https://example.com/chat-api", {  // Replace with actual API URL
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ message })
+                        body: JSON.stringify({ message, character_description: characters[character] })
                     });
                     let data = await response.json();
                     return data.response || "No Response";
@@ -61,20 +80,21 @@
                 }
             }
 
-            // Send button click event
             $("#send").click(async function() {
                 let message = $("#message").val().trim();
                 if (!message) return;
 
+                let selectedCharacter = $("#character").val();
+
                 $("#chat-box").append(`<div class="bg-gray-700 p-2 rounded-md"><strong>${username}:</strong> ${message}</div>`);
                 $("#message").val("");
 
-                let response = await callChatAPI(message);
-                $("#chat-box").append(`<div class="bg-green-700 p-2 rounded-md"><strong>ZetaAI:</strong> ${response}</div>`);
+                let response = await callChatAPI(message, selectedCharacter);
+                $("#chat-box").append(`<div class="bg-green-700 p-2 rounded-md"><strong>ZetaAI (${selectedCharacter}):</strong> ${response}</div>`);
                 $("#chat-box").scrollTop($("#chat-box")[0].scrollHeight);
             });
 
-            // Voice Recognition Setup
+            // Voice Recognition
             let recognition;
             if ("webkitSpeechRecognition" in window) {
                 recognition = new webkitSpeechRecognition();
@@ -100,7 +120,6 @@
                 };
             }
 
-            // Voice Recording Button Click
             $("#record").click(function() {
                 if (recognition) {
                     recognition.start();
