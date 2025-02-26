@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZetaAI Chat</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white flex flex-col justify-center items-center h-screen">
+
+    <!-- Stylish Header -->
+    <header class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white text-center py-6 shadow-lg">
+        <h1 class="text-4xl font-bold tracking-widest drop-shadow-lg">
+            <span class="text-yellow-400">Zeta</span><span class="text-white">AI</span>
+        </h1>
+        <p class="text-sm opacity-80 mt-1">Your Smart Chat Assistant</p>
+    </header>
+
+    <!-- Username Widget -->
+    <div class="absolute top-20 right-4 bg-gray-700 px-4 py-2 rounded-md text-sm shadow-md">
+        <span id="username"></span>
+    </div>
+
+    <!-- Chat Container -->
+    <div class="w-full max-w-3xl h-[80vh] bg-gray-800 p-6 rounded-lg shadow-lg flex flex-col mt-6">
+        
+        <!-- Chat Box -->
+        <div id="chat-box" class="flex-1 overflow-y-auto p-2 space-y-2 border-b border-gray-600"></div>
+        
+        <!-- Input & Voice Controls -->
+        <div class="flex mt-3 space-x-2">
+            <button id="record" class="p-2 bg-red-500 rounded text-white">🎤</button>
+            <input type="text" id="message" class="flex-1 p-2 bg-gray-700 border-none text-white rounded" placeholder="Type or speak a message...">
+            <button id="send" class="p-2 bg-blue-500 rounded">Send</button>
+        </div>
+
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            let username = localStorage.getItem("chat_username") || "Anonymous";
+            if (!localStorage.getItem("chat_username")) {
+                username = prompt("Enter your username:") || "Anonymous";
+                localStorage.setItem("chat_username", username);
+            }
+            $("#username").text(`Username: ${username}`);
+
+            // Function to call chat API
+            async function callChatAPI(message) {
+                try {
+                    let response = await fetch("https://example.com/chat-api", {  // Replace with actual API URL
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ message })
+                    });
+                    let data = await response.json();
+                    return data.response || "No Response";
+                } catch {
+                    return "No Response";
+                }
+            }
+
+            // Send button click event
+            $("#send").click(async function() {
+                let message = $("#message").val().trim();
+                if (!message) return;
+
+                $("#chat-box").append(`<div class="bg-gray-700 p-2 rounded-md"><strong>${username}:</strong> ${message}</div>`);
+                $("#message").val("");
+
+                let response = await callChatAPI(message);
+                $("#chat-box").append(`<div class="bg-green-700 p-2 rounded-md"><strong>ZetaAI:</strong> ${response}</div>`);
+                $("#chat-box").scrollTop($("#chat-box")[0].scrollHeight);
+            });
+
+            // Voice Recognition Setup
+            let recognition;
+            if ("webkitSpeechRecognition" in window) {
+                recognition = new webkitSpeechRecognition();
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                recognition.lang = "en-US";
+
+                recognition.onstart = function() {
+                    $("#record").text("Listening...").addClass("bg-gray-500");
+                };
+
+                recognition.onresult = function(event) {
+                    let transcript = event.results[0][0].transcript;
+                    $("#message").val(transcript);
+                };
+
+                recognition.onerror = function() {
+                    alert("Voice recognition failed. Try again.");
+                };
+
+                recognition.onend = function() {
+                    $("#record").text("🎤").removeClass("bg-gray-500");
+                };
+            }
+
+            // Voice Recording Button Click
+            $("#record").click(function() {
+                if (recognition) {
+                    recognition.start();
+                } else {
+                    alert("Your browser does not support speech recognition.");
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
