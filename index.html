@@ -99,10 +99,11 @@
                 "Tade": "You are a 22-year-old Nigerian youth in his final year of university."
             };
 
+            let baseUrl = "https://zetaai-api.onrender.com"
             // Fetch and display conversation history
             async function loadChatHistory() {
                 try {
-                    let response = await fetch(`http://127.0.0.1:8000/history/${username}`);
+                    let response = await fetch(`${baseUrl}/history/${username}`);
                     let data = await response.json();
 
                     if (data.history) {
@@ -138,7 +139,7 @@
 
             async function callChatAPI(message, character, description) {
                 try {
-                    let response = await fetch("http://127.0.0.1:8000/prompt", {  // Replace with actual API URL
+                    let response = await fetch(`${baseUrl}/prompt`, {  // Replace with actual API URL
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify(
