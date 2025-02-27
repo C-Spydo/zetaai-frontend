@@ -76,7 +76,7 @@
     </div>
 
     <script>
-        $(document).ready(function() {
+        $(document).ready(async function() {
             let username = localStorage.getItem("chat_username") || "Anonymous";
             if (!localStorage.getItem("chat_username")) {
                 username = prompt("Enter your username:") || "Anonymous";
@@ -91,6 +91,35 @@
                 "Chief": "You are a Nigerian big man, well-travelled and use lots of big English words.",
                 "Tade": "You are a 22-year-old Nigerian youth in his final year of university."
             };
+
+            // Fetch and display conversation history
+            async function loadChatHistory() {
+                try {
+                    let response = await fetch(`http://127.0.0.1:8000/history/${username}`);
+                    let data = await response.json();
+
+                    if (data.history) {
+                        let historyLines = data.history.split("\n");
+                        historyLines.forEach(line => {
+                            if (line.startsWith("User:")) {
+                                let message = line.replace("User:", "").trim();
+                                $("#chat-box").append(`<div class="bg-gray-700 p-2 rounded-md"><strong>${username}:</strong> ${message}</div>`);
+                            } else if (line.startsWith("AI:")) {
+                                let message = line.replace("AI:", "").trim();
+                                $("#chat-box").append(`<div class="bg-green-700 p-2 rounded-md"><strong>ZetaAI:</strong> ${message}</div>`);
+                            }
+                        });
+
+                        // Scroll to the bottom after loading history
+                        $("#chat-box").scrollTop($("#chat-box")[0].scrollHeight);
+                    }
+                } catch (error) {
+                    console.error("Failed to load chat history:", error);
+                }
+            }
+
+            // Load chat history on page load
+            await loadChatHistory();
 
             $("#character").change(function() {
                 if ($(this).val() === "Custom") {
@@ -188,6 +217,7 @@
                 }
             });
         });
+
     </script>
 
 </body>
