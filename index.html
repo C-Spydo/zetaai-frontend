@@ -84,11 +84,13 @@
 
     <script>
         $(document).ready(async function() {
-            let username = localStorage.getItem("chat_username") || "Anonymous";
-            if (!localStorage.getItem("chat_username")) {
-                username = prompt("Enter your username:") || "Anonymous";
+            let username = localStorage.getItem("chat_username");
+
+                while (!username || username.trim() === "") {
+                    username = prompt("Enter your username:")?.trim();
+                }
+
                 localStorage.setItem("chat_username", username);
-            }
             $("#username").text(`Username: ${username}`);
 
             const characters = {
