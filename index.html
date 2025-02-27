@@ -41,30 +41,36 @@
         <span id="username"></span>
     </div>
 
+    
     <!-- Chat Container -->
-    <div class="w-full max-w-3xl h-[80vh] bg-gray-800 p-6 rounded-lg shadow-lg flex flex-col mt-6">
+    <div class="w-full max-w-6xl h-[80vh] bg-gray-800 p-6 rounded-lg shadow-lg flex flex-col mt-6">
         
         <!-- Chat Box -->
         <div id="chat-box" class="flex-1 overflow-y-auto p-2 space-y-2 border-b border-gray-600"></div>
-        
-        <!-- Input, Voice, and Character Selection -->
-        <div class="flex mt-3 space-x-2">
-            <button id="record" class="p-2 bg-red-500 rounded text-white">🎤</button>
-            <input type="text" id="message" class="flex-1 p-2 bg-gray-700 border-none text-white rounded" placeholder="Type or speak a message...">
-            <button id="send" class="p-2 bg-blue-500 rounded">Send</button>
-        </div>
 
-        <!-- Character Selection -->
-        <div class="flex mt-3 space-x-2 items-center">
-            <label for="character" class="text-sm opacity-80">Choose AI:</label>
-            <select id="character" class="p-2 bg-gray-700 text-white rounded flex-1">
-                <option value="Peter">Peter - Nigerian Bank Worker</option>
-                <option value="Femi">Femi - PHD in Economics & Statistics</option>
-                <option value="Amaka">Amaka - Informal Businesswoman</option>
-                <option value="Chief">Chief - Well-travelled Nigerian Big Man</option>
-                <option value="Tade">Tade - 22yo University Student</option>
-                <option value="Custom">➕ Add Custom Character</option>
-            </select>
+        <!-- Input, Voice, and Character Selection Side by Side -->
+        <div class="flex mt-3 space-x-2">
+            <!-- Voice Input Button -->
+            <button id="record" class="p-2 bg-red-500 rounded text-white">🎤</button>
+
+            <!-- Text Input -->
+            <input type="text" id="message" class="flex-1 p-2 bg-gray-700 border-none text-white rounded" placeholder="Type or speak a message...">
+
+            <!-- Send Button -->
+            <button id="send" class="p-2 bg-blue-500 rounded">Send</button>
+
+            <!-- Character Selection -->
+            <div class="flex items-center space-x-2">
+                <label for="character" class="text-sm opacity-80">AI:</label>
+                <select id="character" class="p-2 bg-gray-700 text-white rounded">
+                    <option value="Peter">Peter - Nigerian Bank Worker</option>
+                    <option value="Femi">Femi - PHD in Economics & Statistics</option>
+                    <option value="Amaka">Amaka - Informal Businesswoman</option>
+                    <option value="Chief">Chief - Well-travelled Nigerian Big Man</option>
+                    <option value="Tade">Tade - 22yo University Student</option>
+                    <option value="Custom">➕ Add Custom Character</option>
+                </select>
+            </div>
         </div>
 
         <!-- Custom Character Inputs (Hidden by Default) -->
@@ -72,6 +78,7 @@
             <input type="text" id="custom-name" class="w-full p-2 bg-gray-700 border-none text-white rounded mb-2" placeholder="Custom Character Name">
             <textarea id="custom-description" class="w-full p-2 bg-gray-700 border-none text-white rounded" placeholder="Describe your character..."></textarea>
         </div>
+
 
     </div>
 
