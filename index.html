@@ -101,15 +101,17 @@
                 "Tade": "You are a 22-year-old Nigerian youth in his final year of university."
             };
 
-            let baseUrl = "https://zetaai-api.onrender.com"
+            // let baseUrl = "https://zetaai-api.onrender.com"
+            let baseUrl = "https://zeta-ai-api.onrender.com"
+
             // Fetch and display conversation history
             async function loadChatHistory() {
                 try {
-                    let response = await fetch(`${baseUrl}/history/${username}`);
+                    let response = await fetch(`${baseUrl}/chat-history?username=${username}`);
                     let data = await response.json();
 
-                    if (data.history) {
-                        let historyLines = data.history.split("\n");
+                    if (data.data.chat_memory) {
+                        let historyLines = data.data.chat_memory.split("\n");
                         historyLines.forEach(line => {
                             if (line.startsWith("User:")) {
                                 let message = line.replace("User:", "").trim();
@@ -141,14 +143,14 @@
 
             async function callChatAPI(message, character, description) {
                 try {
-                    let response = await fetch(`${baseUrl}/prompt`, {  // Replace with actual API URL
+                    let response = await fetch(`${baseUrl}/chat`, {  // Replace with actual API URL
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify(
-                            { message, system_message: description, username})
+                            { prompt: message, system_message: description, username})
                     });
-                    let data = await response.text();
-                    return data || "No Response";
+                    let data = await response.json();
+                    return data.data.ai_response || "No Response";
                 } catch {
                     return "No Response";
                 }
