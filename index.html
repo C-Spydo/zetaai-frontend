@@ -29,6 +29,17 @@
 </head>
 <body class="bg-gray-900 text-white flex flex-col justify-center items-center h-screen">
 
+    <!-- Sidebar Toggle Button -->
+    <button id="toggle-sidebar" class="absolute top-4 left-4 bg-blue-600 text-white p-2 rounded-md z-50">
+        ☰ Chat History
+    </button>
+
+    <!-- Sidebar for Chat History -->
+    <aside id="chat-sidebar" class="fixed left-0 top-0 w-64 bg-gray-800 p-4 h-full overflow-y-auto transform -translate-x-full transition-transform duration-300 ease-in-out">
+        <h2 class="text-lg font-bold mb-4">Chat History</h2>
+        <ul id="chat-history-list" class="space-y-2"></ul>
+    </aside>
+
     <!-- Stylish Header -->
     <header class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white text-center py-6 shadow-lg">
         <h1 class="text-4xl font-bold tracking-widest drop-shadow-lg">
@@ -228,6 +239,12 @@
                 } else {
                     alert("Your browser does not support speech recognition.");
                 }
+            });
+        });
+        // toggle sidebar
+        $(document).ready(function() {
+        $("#toggle-sidebar").click(function() {
+            $("#chat-sidebar").toggleClass("-translate-x-full");
             });
         });
 
