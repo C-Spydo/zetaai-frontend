@@ -1,0 +1,151 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    background-color: #1a202c;
+    color: white;
+    margin: 0;
+    font-family: Arial, sans-serif;
+  }
+  
+  header {
+    width: 100%;
+    background: linear-gradient(to right, #2563eb, #9333ea);
+    text-align: center;
+    padding: 24px 0;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  header h1 {
+    font-size: 2.25rem;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  
+  header h1 span:first-child {
+    color: #facc15;
+  }
+  
+  header p {
+    font-size: 0.875rem;
+    opacity: 0.8;
+    margin-top: 4px;
+  }
+  
+  .username-widget {
+    position: absolute;
+    top: 96px;
+    right: 16px;
+    background-color: #374151;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  .chat-container {
+    width: 100%;
+    max-width: 72rem;
+    height: 80vh;
+    background-color: #2d3748;
+    padding: 24px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    margin-top: 24px;
+  }
+  
+  .chat-box {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px;
+    border-bottom: 1px solid #4a5568;
+  }
+  
+  .chat-message {
+    padding: 8px;
+    border-radius: 6px;
+  }
+  
+  .chat-message.user {
+    background-color: #374151;
+  }
+  
+  .chat-message.ai {
+    background-color: #047857;
+  }
+  
+  .input-container { /*smths glitching here */
+    display: flex;
+    margin-top: 12px;
+    gap: 8px;
+    align-items: center;
+  }
+  
+  .voice-button,
+  .send-button {
+    padding: 8px 12px;
+    border-radius: 6px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+  
+  .voice-button {
+    background-color: #dc2626;
+  }
+  
+  .send-button {
+    background-color: #2563eb;
+  }
+  
+  .input-field {
+    flex: 1;
+    padding: 10px;
+    background-color: #374151;
+    border: none;
+    color: white;
+    border-radius: 6px;
+    font-size: 1rem;
+  }
+  
+  .character-selection {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1rem;
+  }
+  
+  .character-selection label {
+    font-size: 1rem;
+    opacity: 0.8;
+  }
+  
+  .character-selection select {
+    padding: 8px;
+    background-color: #374151;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+  }
+  
+  .custom-character {
+    margin-top: 12px;
+  }
+  
+  .custom-character input,
+  .custom-character textarea {
+    width: 100%;
+    padding: 10px;
+    background-color: #374151;
+    border: none;
+    color: white;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    font-size: 1rem;
+  }

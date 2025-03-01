@@ -1,0 +1,48 @@
+<div class="container">
+  <!-- Header -->
+  <header class="header">
+      <h1><span class="highlight">Zeta</span>AI</h1>
+      <p>Your Smart Chat Assistant</p>
+  </header>
+
+  <!-- Username Widget -->
+  <div class="username-widget">
+      <span>Username: {{ username }}</span>
+  </div>
+
+  <!-- Chat Container -->
+  <div class="chat-container">
+      <!-- Chat Box -->
+      <div class="chat-box" id="chatBox">
+          <div *ngFor="let msg of chatHistory" class="chat-message {{ msg.isUser ? 'user' : 'ai' }}">
+              <strong>{{ msg.isUser ? username : 'ZetaAI' }}:</strong> {{ msg.text }}
+          </div>
+      </div>
+
+      <!-- Input, Voice, and Character Selection -->
+      <div class="input-container">
+          <!-- Voice Input Button -->
+          <button (click)="startVoiceRecognition()" class="voice-button">🎤</button>
+
+          <!-- Text Input -->
+          <input [(ngModel)]="message" type="text" class="input-field" placeholder="Type or speak a message...">
+
+          <!-- Send Button -->
+          <button (click)="sendMessage()" class="send-button">Send</button>
+
+          <!-- Character Selection -->
+          <div class="character-selection">
+              <label>AI:</label>
+              <select [(ngModel)]="selectedCharacter" class="character-dropdown">
+                  <option *ngFor="let char of characterOptions" [value]="char.value">{{ char.label }}</option>
+              </select>
+          </div>
+      </div>
+
+      <!-- Custom Character Inputs -->
+      <div *ngIf="selectedCharacter === 'Custom'" class="custom-character">
+          <input [(ngModel)]="customCharacterName" class="input-field" placeholder="Custom Character Name">
+          <textarea [(ngModel)]="customCharacterDescription" class="input-field" placeholder="Describe your character..."></textarea>
+      </div>
+  </div>
+</div>
