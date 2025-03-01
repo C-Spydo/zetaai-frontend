@@ -6,6 +6,7 @@
     <title>ZetaAI Chat</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         .dot-animation {
             display: inline-block;
@@ -162,7 +163,7 @@
 
                 let selectedCharacter = $("#character").val();
                 let characterName = selectedCharacter;
-                let characterDescription = characters[selectedCharacter] || "";
+                let characterDescription = "Your name is " + selectedCharacter + " " + characters[selectedCharacter] || "";
 
                 // If custom character is selected, get user inputs
                 if (selectedCharacter === "Custom") {
