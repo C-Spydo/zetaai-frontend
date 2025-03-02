@@ -164,6 +164,10 @@
                         let characterName = $(this).find("strong").text();
                         let chatMemory = data.data.chats.find(chat => chat.character_name === characterName).memory;
                         displayChat(characterName, chatMemory);
+
+                        // toggle off the sidebar
+                        $("#chat-sidebar").toggleClass("-translate-x-full");
+
                     });
 
             } else {
