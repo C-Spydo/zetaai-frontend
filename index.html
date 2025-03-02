@@ -33,11 +33,14 @@
     <button id="toggle-sidebar" class="absolute top-4 left-4 bg-blue-600 text-white p-2 rounded-md z-50">
         ☰ Chat History
     </button>
+    <!-- Start New Chat -->
+    <button id="start-new-chat" class="bg-green-600 text-white p-2 rounded-md"> New Chat</button>
 
     <!-- Sidebar for Chat History -->
     <aside id="chat-sidebar" class="fixed left-0 top-0 w-64 bg-gray-800 p-4 h-full overflow-y-auto transform -translate-x-full transition-transform duration-300 ease-in-out">
-        <h2 class="text-lg font-bold mb-4">Chat History</h2>
+        <h2 class="text-lg font-bold mb-4">Chat History</h2> 
         <ul id="chat-history-list" class="space-y-2"></ul>
+
     </aside>
 
     <!-- Stylish Header -->
@@ -48,14 +51,13 @@
         <p class="text-sm opacity-80 mt-1">Your Smart Chat Assistant</p>
     </header>
 
-    <!-- Username Widget -->
-    <div class="absolute top-24 right-4 bg-gray-700 px-4 py-2 rounded-md text-sm shadow-md">
+   <!-- Username Widget -->
+   <div class="absolute top-24 right-4 bg-gray-700 px-4 py-2 rounded-md text-sm shadow-md">
         <span id="username"></span>
-        <!-- Log out Button-->
-        <button id="logout" class="bg-red-500 px-3 py-1 rounded text-white">Logout</button>
+    <!-- Log out Button-->
+    <button id="logout" class="bg-red-500 px-3 py-1 rounded text-white">Logout</button>
     </div>
 
-    
     <!-- Chat Container -->
     <div class="w-full max-w-6xl h-[80vh] bg-gray-800 p-6 rounded-lg shadow-lg flex flex-col mt-6">
         
@@ -309,6 +311,13 @@
             $("#chat-sidebar").toggleClass("-translate-x-full");
             });
         });
+
+        // new Chat
+        $("#start-new-chat").click(function () {
+        $("#chat-box").empty(); 
+        $("#character").val("Peter"); // Reset character selection to default
+        $("#custom-character-fields").addClass("hidden"); // Hide custom character fields
+    });
 
     </script>
 
