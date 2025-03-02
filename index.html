@@ -125,28 +125,80 @@
             // Fetch and display conversation history
             async function loadChatHistory() {
                 try {
-                    let response = await fetch(`${baseUrl}/chat-history?username=${username}`);
+                    let response = await fetch(`${baseUrl}/sign-in`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username })
+                    });  
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }     
+
+
                     let data = await response.json();
+                    console.log("Fetching chat history...");
+                    console.log(data)
+                    
+                if (data.data && data.data.chats.length > 0) {
+                    let chatSidebar = $("#chat-sidebar");
+                    chatSidebar.empty(); // Clear existing chats
 
-                    if (data.data.chat_memory) {
-                        let historyLines = data.data.chat_memory.split("\n");
-                        historyLines.forEach(line => {
-                            if (line.startsWith("User:")) {
-                                let message = line.replace("User:", "").trim();
-                                $("#chat-box").append(`<div class="bg-gray-700 p-2 rounded-md"><strong>${username}:</strong> ${message}</div>`);
-                            } else if (line.startsWith("AI:")) {
-                                let message = line.replace("AI:", "").trim();
-                                $("#chat-box").append(`<div class="bg-green-700 p-2 rounded-md"><strong>ZetaAI:</strong> ${message}</div>`);
-                            }
-                        });
+                    data.data.chats.forEach(chat => {
+                        let { character_name, memory } = chat;
+                        let chatLines = memory.split("\n");
 
-                        // Scroll to the bottom after loading history
-                        $("#chat-box").scrollTop($("#chat-box")[0].scrollHeight);
-                    }
-                } catch (error) {
-                    console.error("Failed to load chat history:", error);
-                }
+                        // Remove system message (first line)
+                        chatLines.shift();
+
+                        let lastMessage = chatLines.length > 0 ? chatLines[chatLines.length - 1] : "No messages yet";
+
+                        // Format chat preview
+                        chatSidebar.append(`
+                            <div class="chat-preview p-2 border-b border-gray-600 cursor-pointer">
+                                <strong>${character_name}</strong>: ${lastMessage.replace(/(User:|AI:)/, "").trim()}
+                            </div>
+                        `);
+                    });      
+                    // Load full chat on click
+                    $(".chat-preview").click(function() {
+                        let characterName = $(this).find("strong").text();
+                        let chatMemory = data.data.chats.find(chat => chat.character_name === characterName).memory;
+                        displayChat(characterName, chatMemory);
+                    });
+
+            } else {
+                console.warn("No chat history found.");
+                $("#chat-sidebar").html("<p class='text-gray-500'>No chats available</p>");
             }
+        } catch (error) {
+            console.error("Failed to load chat history:", error);
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "Failed to sign in or load chat history. Please try again later.",
+            });
+        }
+                }
+    // Function to display full chat in the main chat window
+    function displayChat(characterName, chatMemory) {
+        let chatLines = chatMemory.split("\n");
+
+        // Remove system message
+        chatLines.shift();
+
+        let chatWindow = $("#chat-window");
+        chatWindow.empty();
+
+        chatLines.forEach(line => {
+            if (line.startsWith("User:")) {
+                chatWindow.append(`<div class="user-message">${line.replace("User:", "").trim()}</div>`);
+            } else if (line.startsWith("AI:")) {
+                chatWindow.append(`<div class="ai-message">${line.replace("AI:", "").trim()}</div>`);
+            }
+        });
+
+        $("#chat-title").text(characterName);
+    }
 
             // Load chat history on page load
             await loadChatHistory();
