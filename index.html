@@ -181,23 +181,23 @@
                 }
     // Function to display full chat in the main chat window
     function displayChat(characterName, chatMemory) {
+        console.log('Showing smth')
         let chatLines = chatMemory.split("\n");
 
         // Remove system message
         chatLines.shift();
 
-        let chatWindow = $("#chat-window");
-        chatWindow.empty();
+        let chatBox = $("#chat-box");
+        chatBox.empty();
 
         chatLines.forEach(line => {
             if (line.startsWith("User:")) {
-                chatWindow.append(`<div class="user-message">${line.replace("User:", "").trim()}</div>`);
+                chatBox.append(`<div class="bg-gray-700 p-2 rounded-md"><strong>${username}:</strong> ${line.replace("User:", "").trim()}</div>`);
             } else if (line.startsWith("AI:")) {
-                chatWindow.append(`<div class="ai-message">${line.replace("AI:", "").trim()}</div>`);
+                chatBox.append(`<div class="bg-green-700 p-2 rounded-md"><strong>ZetaAI (${characterName}):</strong> ${line.replace("AI:", "").trim()}</div>`);
             }
         });
 
-        $("#chat-title").text(characterName);
     }
 
             // Load chat history on page load
